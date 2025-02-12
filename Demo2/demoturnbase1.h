@@ -5,6 +5,8 @@
 #include <thread>  // ใช้สำหรับ sleep_for
 #include <chrono>  // ใช้สำหรับหน่วยเวลา
 #include <vector>
+#include<cstdlib>
+#include<iomanip>
 
 using namespace std;
 
@@ -26,6 +28,7 @@ void Pageturnbase(char who);
 void showpokemon();
 void delaySeconds(double seconds);
 void selectpokemon(char who);
+void win(int p);
 
 //รายละเอียด pokemons
 /*struct poke
@@ -68,37 +71,39 @@ class player
     public:
         string nameplayer;                //ชื่อ
         int playerAction;
-        double takeNomalATK(int n, double oppatk);
-        double takeStrike(int n, double oppatk, double oppspd);
-        double defATK(int n, double oppatk);
+        double takeNomalATK(int n, player &opp);
+        double takeStrike(int n, player &opp);
+        void def(int n);
+        void undef(int n);
         int evade();
         void createplayer();
         void choosepokemon(int n);
         void comchoosepokemon();
         bool isDead(int n);
         void showstat(int n, int who);
+        double checkspd(int n);
 };
 
-double player::takeNomalATK(int n, double oppatk){
-    double damage = (oppatk*(1-(myteam[n].def/100)));
-    myteam[n].hp -= damage;
+double player::takeNomalATK(int n, player &opp){
+    double damage = (myteam[n].atk*(1-(opp.myteam[n].def/100)));
+    opp.myteam[n].hp -= damage;
 
     return damage;
 }
 
-double player::takeStrike(int n, double oppatk, double oppspd){
-    double skATK = oppatk + (abs(myteam[n].spd - oppspd)*10);
-	double damage = takeNomalATK(n, skATK);
-
+double player::takeStrike(int n, player &opp){
+    double skATK = myteam[n].atk + (abs(opp.myteam[n].spd - myteam[n].spd)*10);
+	double damage = (skATK*(1-(opp.myteam[n].def/100)));
+    opp.myteam[n].hp -= damage;
     return damage;
 }
 
-double player::defATK(int n, double oppatk){
+void player::def(int n){
     myteam[n].def *= 2;
-	double damage = takeNomalATK(n, oppatk);
-    myteam[n].def /= 2;
+}
 
-    return damage;
+void player::undef(int n){
+    myteam[n].def /= 2;
 }
 
 
@@ -151,47 +156,97 @@ bool player::isDead(int n){
 
 void player::showstat(int n, int who){
     if(who == 1){
-        cout << "----------------------------------------------" << endl;
+        cout << "---------------------------------------------------------------------------------" << endl;
         cout << "Player 1's name : " << nameplayer << endl;
         cout << "Pokemon name : " << myteam[n].namepokemon << "\tElement : " << myteam[n].element << endl;
         cout << "HP: " << myteam[n].hp << "/" << myteam[n].hpmax << "\tATK: "<< myteam[n].atk << "\t\tDEF: "<< myteam[n].def << endl;
-        cout << "----------------------------------------------" << endl;
+        cout << "---------------------------------------------------------------------------------" << endl;
     }
     else{
-        cout << "\t\t\t\t\t\t----------------------------------------------" << endl; 
+        cout << "\t\t\t\t\t\t---------------------------------------------------------------------------------" << endl; 
 		cout << "\t\t\t\t\t\tPlayer 2's name : " << nameplayer << endl; 
 		cout << "\t\t\t\t\t\tPokemon name : " << myteam[n].namepokemon << "\tElement : " << myteam[n].element << endl;
         cout << "\t\t\t\t\t\tHP: " << myteam[n].hp << "/" << myteam[n].hpmax << "\tATK: "<< myteam[n].atk << "\t\tDEF: "<< myteam[n].def << endl;
-		cout << "\t\t\t\t\t\t----------------------------------------------" << endl;
+		cout << "\t\t\t\t\t\t---------------------------------------------------------------------------------" << endl;
     }
 }
 
-void drawscene(int p1, int p2){
+double player::checkspd(int n){
+    return myteam[n].spd;
+}
+
+void drawscene(int p1, player &p_1, int p2, player &p_2){
+    bool checkdef1 = false;
+    bool checkdef2 = false;
+
     if(p1 == 1){
         cout << "Player 1 Attack!!!!!";
+        double damage = p_1.takeNomalATK(0, p_2);
+        cout << "\t\t" << setw(2) << damage << " Damage";
     }
     if(p1 == 2){
         cout << "Player 1 Strike!!!!!";
+        if(p2 != 4){
+            double damage = p_1.takeStrike(0, p_2);
+            cout << "\t\t" << setw(2) << damage << " Damage";
+        }
     }
     if(p1 == 3){
         cout << "Player 1 Defend!!!!!";
+        if(p2 != 2){
+            p_1.def(0);
+            checkdef1 = true;
+        }
     }
     if(p1 == 4){
         cout << "Player 1 Counter!!!!!";
+        if(p2 == 2){
+            double damage = p_1.takeStrike(0, p_2);
+            cout << "\t\t" << setw(2) << damage << " Damage";
+        }
     }
     if(p2 == 1){
         cout << "\t\t\t\tPlayer 2 Attack!!!!!";
+        double damage = p_2.takeNomalATK(0, p_1);
+        cout << "\t\t" << setw(2) << damage << " Damage";
     }
     if(p2 == 2){
         cout << "\t\t\t\tPlayer 2 Strike!!!!!";
+        if(p1 != 4){
+            double damage = p_2.takeStrike(0, p_1);
+            cout << "\t\t" << setw(2) << damage << " Damage";
+        }
+        
     }
     if(p2 == 3){
         cout << "\t\t\t\tPlayer 2 Defend!!!!!";
+        if(p1 != 2){
+            p_2.def(0);
+            checkdef2 = true;
+        }
     }
     if(p2 == 4){
         cout << "\t\t\t\tPlayer 2 Counter!!!!!";
+        if(p1 == 2){
+            double damage = p_2.takeStrike(0, p_1);
+            cout << "\t\t" << setw(2) << damage << " Damage";
+        }
+    }
+    if(checkdef1){
+        p_1.undef(0);
+    }
+    if(checkdef2){
+        p_2.undef(0);
     }
     cout << endl;
+}
+
+void win(int p){
+    cout << "===========================================================================" << endl;
+    for(int i = 0; i < 3; i++) cout << endl;
+    cout << "                                      Player" << p << "Win" << endl;
+    for(int i = 0; i < 3; i++) cout << endl;
+    cout << "===========================================================================" << endl;
 }
 /*
 struct personalplayer{

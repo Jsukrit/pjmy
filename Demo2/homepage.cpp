@@ -30,6 +30,7 @@ int main()
             /*cout << "Player 1" << "\t\t" << "Player 2" << endl;
             cout << p1 << " HP: " << player[0].pokemon[player[0].pokeplayer].hp << "\t\t";
             cout << player[1].pokemon[player[1].pokeplayer].name << " HP: " << player[1].pokemon[player[1].pokeplayer].hp << "\n";*/
+            delaySeconds(1);
             p1.showstat(0, 1);
             p2.showstat(0, 2);
 
@@ -42,11 +43,25 @@ int main()
             cout << "Player'2 Choice : " << p2.playerAction << endl;
             int action2 = p2.playerAction;
             
-            cout << "==========================================================================" << endl;
-            drawscene(action1, action2);
-            cout << "==========================================================================" << endl;
+            cout << "===========================================================================================================" << endl;
+            drawscene(action1, p1, action2, p2);
+            cout << "===========================================================================================================" << endl;
             cout << endl;
             delaySeconds(1);
+            if(p1.isDead(0) && p2.isDead(0)){
+                if(p1.checkspd(0) < p2.checkspd(0)){
+                    win(2);
+                    break;
+                }
+            }
+            else if(p2.isDead(0)){
+                win(1);
+                break;
+            }
+            else if(p1.isDead(0)){
+                win(2);
+                break;
+            }
         }
         
     }
