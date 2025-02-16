@@ -47,6 +47,7 @@ double defpokemon[6] = {20.0, 20.0, 40.0, 40.0, 70.0, 70.0};        //รอแ�
 double atkpokemon[6] = {50.0, 50.0, 30.0, 30.0, 20.0, 20.0};        //รอแก้ไขให้สมดุล
 double spdpokemon[6] = {20.0, 20.0, 5.0, 5.0, 1.0, 1.0};    
 string elementpokemon[4] = {"Earth", "Water", "Wind", "Fire"}; 
+int choices[4] = {1, 2, 3, 4}; //1 = ตีปกติ, 2 = strike, 3 = ป้องกัน, 4 = counter
 
 
 class pokemon
@@ -66,6 +67,7 @@ class pokemon
 class player
 {
     string type;
+    string name;
     vector<pokemon> myteam;
     
     public:
@@ -76,7 +78,7 @@ class player
         void def(int n);
         void undef(int n);
         int evade();
-        void createplayer();
+        void createplayer(const string &n);
         void choosepokemon(int n);
         void comchoosepokemon();
         bool isDead(int n);
@@ -99,7 +101,7 @@ double player::takeStrike(int n, player &opp){
 }
 
 void player::def(int n){
-    myteam[n].def *= 2;
+    myteam[n].def *= 5;
 }
 
 void player::undef(int n){
@@ -123,10 +125,10 @@ void player::choosepokemon(int n){
     myteam.push_back(unit);
 }
 
-void player::createplayer(){
-    type = "p1";
-    cout << "PLEASE ENTER YOUR NAME : ";
-    getline(cin, nameplayer);
+void player::createplayer(const string &n) {
+    cout << n << " : " << "PLEASE ENTER YOUR NAME : ";
+    cin.ignore();
+    getline(cin, name);
 }
 
 
@@ -179,66 +181,66 @@ void drawscene(int p1, player &p_1, int p2, player &p_2){
     bool checkdef1 = false;
     bool checkdef2 = false;
 
-    if(p1 == 1){
-        cout << "Player 1 Attack!!!!!";
-        double damage = p_1.takeNomalATK(0, p_2);
-        cout << "\t\t" << setw(2) << damage << " Damage";
-    }
-    if(p1 == 2){
-        cout << "Player 1 Strike!!!!!";
-        if(p2 != 4){
-            double damage = p_1.takeStrike(0, p_2);
+        if(p1 == 1){
+            cout << "Player 1 Attack!!!!!";
+            double damage = p_1.takeNomalATK(0, p_2);
             cout << "\t\t" << setw(2) << damage << " Damage";
         }
-    }
-    if(p1 == 3){
-        cout << "Player 1 Defend!!!!!";
-        if(p2 != 2){
-            p_1.def(0);
-            checkdef1 = true;
-        }
-    }
-    if(p1 == 4){
-        cout << "Player 1 Counter!!!!!";
-        if(p2 == 2){
-            double damage = p_1.takeStrike(0, p_2);
-            cout << "\t\t" << setw(2) << damage << " Damage";
-        }
-    }
-    if(p2 == 1){
-        cout << "\t\t\t\tPlayer 2 Attack!!!!!";
-        double damage = p_2.takeNomalATK(0, p_1);
-        cout << "\t\t" << setw(2) << damage << " Damage";
-    }
-    if(p2 == 2){
-        cout << "\t\t\t\tPlayer 2 Strike!!!!!";
-        if(p1 != 4){
-            double damage = p_2.takeStrike(0, p_1);
-            cout << "\t\t" << setw(2) << damage << " Damage";
-        }
-        
-    }
-    if(p2 == 3){
-        cout << "\t\t\t\tPlayer 2 Defend!!!!!";
-        if(p1 != 2){
-            p_2.def(0);
-            checkdef2 = true;
-        }
-    }
-    if(p2 == 4){
-        cout << "\t\t\t\tPlayer 2 Counter!!!!!";
         if(p1 == 2){
-            double damage = p_2.takeStrike(0, p_1);
+            cout << "Player 1 Strike!!!!!";
+            if(p2 != 4){
+                double damage = p_1.takeStrike(0, p_2);
+                cout << "\t\t" << setw(2) << damage << " Damage";
+            }
+        }
+        if(p1 == 3){
+            cout << "Player 1 Defend!!!!!";
+            if(p2 != 2){
+                p_1.def(0);
+                checkdef1 = true;
+            }
+        }
+        if(p1 == 4){
+            cout << "Player 1 Counter!!!!!";
+            if(p2 == 2){
+                double damage = p_1.takeStrike(0, p_2);
+                cout << "\t\t" << setw(2) << damage << " Damage";
+            }
+        }
+        if(p2 == 1){
+            cout << "\t\t\t\tPlayer 2 Attack!!!!!";
+            double damage = p_2.takeNomalATK(0, p_1);
             cout << "\t\t" << setw(2) << damage << " Damage";
         }
-    }
-    if(checkdef1){
-        p_1.undef(0);
-    }
-    if(checkdef2){
-        p_2.undef(0);
-    }
-    cout << endl;
+        if(p2 == 2){
+            cout << "\t\t\t\tPlayer 2 Strike!!!!!";
+            if(p1 != 4){
+                double damage = p_2.takeStrike(0, p_1);
+                cout << "\t\t" << setw(2) << damage << " Damage";
+            }
+        
+        }
+        if(p2 == 3){
+            cout << "\t\t\t\tPlayer 2 Defend!!!!!";
+            if(p1 != 2){
+                p_2.def(0);
+                checkdef2 = true;
+            }
+        }
+        if(p2 == 4){
+            cout << "\t\t\t\tPlayer 2 Counter!!!!!";
+            if(p1 == 2){
+                double damage = p_2.takeStrike(0, p_1);
+                cout << "\t\t" << setw(2) << damage << " Damage";
+            }
+        }
+        if(checkdef1){
+            p_1.undef(0);
+        }
+        if(checkdef2){
+            p_2.undef(0);
+        }
+        cout << endl;
 }
 
 void win(int p){
@@ -257,7 +259,6 @@ struct personalplayer{
 }player[2];
 */
 
-int choices[] = {1, 2, 3, 4};	//1 = ตีปกติ, 2 = strike, 3 = ป้องกัน, 4 = counter
 bool sc;
 
 
@@ -289,9 +290,9 @@ char Page2(){
     do{
         cout << "Enter your answer : ";
         cin >> who;
-    }while(who != 'C' && who != 'P');
+    }while(toupper(who) != 'C' && toupper(who) != 'P');
 
-    if(who == 'C'){
+    if(toupper(who) == 'C'){
         cout << ">>> (1) Play with Computer (PVE) <<<" << endl;
     }    
     else{
@@ -303,6 +304,23 @@ char Page2(){
     cin.ignore();
     return who;
 }
+
+void Return2Menu() {
+    string entertoreturn;
+    cout << "----------------------------------" << endl;
+    cout << "|                                |" << endl;
+    cout << "|                                |" << endl;
+    cout << "|         return to menu         |" << endl;
+    cout << "|                                |" << endl;
+    cout << "|                                |" << endl;
+    cout << "----------------------------------" << endl;
+    cout << "     Please press Enter to continue     " << endl;
+    
+    cin.sync();  
+    cin.ignore(); 
+    getline(cin, entertoreturn);
+}
+
 
 /*
 void createwindowCom(){
