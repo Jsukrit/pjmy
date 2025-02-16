@@ -241,6 +241,7 @@ void drawscene(int p1, player &p_1, int p2, player &p_2){
             p_2.undef(0);
         }
         cout << endl;
+
 }
 
 void win(int p){
