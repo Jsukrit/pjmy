@@ -1,0 +1,48 @@
+#include<iostream>
+#include<string>
+
+using namespace std;
+
+
+int main(){
+        cout << "  DOG " << endl;
+        cout << " ** **" << endl;
+        cout << "* 0 0 *" << endl;
+        cout << "V* Y *V" << endl;
+        cout << " * * *" << endl;
+        cout << " *    **" << endl;
+        cout << " ** (__V" << endl;
+        cout << "******************************" << endl;
+        cout << "  DOG " << endl;
+        cout << "  ** **" << endl;
+        cout << " * 0 0 *" << endl;
+        cout << " V* Y *v" << endl;
+        cout << " *    *" << endl;
+        cout << "V__) **" << endl;
+        cout << "************************************" << endl;
+        cout << "          pink panter            " << endl;
+        cout << "  .--.            .--." << endl;
+        cout << " ( (***.*--**--*.***) )" << endl;
+        cout << "  *-.   __   __    .-*" << endl;
+        cout << "   *   *__* *__*   *" << endl;
+        cout << "  l    * 0* * 0*    l" << endl;
+        cout << "  *     **   **     *" << endl;
+        cout << "   *-.  *-* *-*  .-*" << endl;
+        cout << "     *  *.___.*  *" << endl;
+        cout << "     *     I     *" << endl;
+        cout << "      **--***--**" << endl;
+        cout << "        *.___.*" << endl;
+        cout << "************************************" << endl;
+        cout << "          pink panter            " << endl;
+        cout << "  .--.            .--." << endl;
+        cout << " ( (***.*--**--*.***) )" << endl;
+        cout << "  *-.   __   __    .-*" << endl;
+        cout << "   *   *__* *__*   *" << endl;
+        cout << "  l    *0 * *0 *    l" << endl;
+        cout << "  *     **   **     *" << endl;
+        cout << "   *-.  *-* *-*  .-*" << endl;
+        cout << "     *  *.___.*  *" << endl;
+        cout << "     *     I     *" << endl;
+        cout << "      **--***--**" << endl;
+        cout << "        *.___.*" << endl;
+}
